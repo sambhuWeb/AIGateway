@@ -9,11 +9,23 @@ class FileCache implements CacheInterface
 
     public function __construct(string $cacheDirectory = null)
     {
-        $this->cacheDirectory = $cacheDirectory ?? sys_get_temp_dir() . '/ai_gateway_cache';
+        if ($cacheDirectory === null) {
+            // Default to storage/cache directory relative to package root
+            $this->cacheDirectory = $this->getDefaultCacheDirectory();
+        } else {
+            $this->cacheDirectory = $cacheDirectory;
+        }
 
         if (!is_dir($this->cacheDirectory)) {
             mkdir($this->cacheDirectory, 0755, true);
         }
+    }
+
+    private function getDefaultCacheDirectory(): string
+    {
+        // Get the package root directory (3 levels up from this file)
+        $packageRoot = dirname(__DIR__, 2);
+        return $packageRoot . '/storage/cache';
     }
 
     public function get(string $key): ?string

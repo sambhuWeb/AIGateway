@@ -211,3 +211,10 @@ package-lock.json
 
 cypress/reports/*
 cypress/screenshots/*
+
+# Composer
+/vendor/
+composer.lock
+
+# AIGateway cache files
+/storage/cache/*.cache

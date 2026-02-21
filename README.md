@@ -112,7 +112,7 @@ echo $response->getContent();
 
 ## Using Caching
 
-The package includes a file-based caching system to avoid redundant API calls for identical requests.
+The package includes a file-based caching system to avoid redundant API calls for identical requests. By default, cache files are stored in `storage/cache/` directory within the package.
 
 ### Enable Caching
 
@@ -124,11 +124,11 @@ use AIGateway\Cache\FileCache;
 use AIGateway\AI\OpenAI\OpenAIConnector;
 use AIGateway\AI\DTO\Input\OpenAIRequestDTO;
 
-// Create cache instance (optional: specify cache directory)
-$cache = new FileCache('/path/to/cache/directory');
-
-// Or use default temp directory
+// Create cache instance - uses storage/cache/ directory by default
 $cache = new FileCache();
+
+// Or specify a custom cache directory
+$cache = new FileCache('/path/to/custom/cache/directory');
 
 // Create connector with cache
 $httpClient = new GuzzleHTTPClient();
@@ -372,6 +372,9 @@ AIGateway/
 │       │   └── OpenAIConnector.php
 │       └── Anthropic/
 │           └── AnthropicConnector.php
+├── storage/
+│   └── cache/              # Default cache directory
+│       └── .gitignore
 ├── tests/
 │   └── UnitTest/
 │       ├── OpenAI/
