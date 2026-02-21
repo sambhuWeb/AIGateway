@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit colors="true">
+<phpunit
+    colors="true"
+    bootstrap="vendor/autoload.php"
+    defaultTestSuite="default"
+>
     <testsuites>
-        <testsuite name="Test Suite">
+        <!-- Default: Unit + Functional tests (no real API calls) -->
+        <testsuite name="default">
+            <directory>./tests/UnitTest/</directory>
+            <directory>./tests/FunctionalTest/</directory>
+        </testsuite>
+
+        <!-- Unit tests only -->
+        <testsuite name="unit">
+            <directory>./tests/UnitTest/</directory>
+        </testsuite>
+
+        <!-- Functional tests only -->
+        <testsuite name="functional">
+            <directory>./tests/FunctionalTest/</directory>
+        </testsuite>
+
+        <!-- End-to-end tests (requires API keys) -->
+        <testsuite name="e2e">
+            <directory>./tests/EndToEndTest/</directory>
+        </testsuite>
+
+        <!-- All tests including E2E -->
+        <testsuite name="all">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>

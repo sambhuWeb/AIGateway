@@ -333,19 +333,51 @@ try {
 
 ## Running Tests
 
+The package includes three types of tests:
+
+- **Unit Tests**: Test individual components in isolation with mocked dependencies
+- **Functional Tests**: Test component integration with mocked HTTP responses
+- **End-to-End Tests**: Test real API calls (requires API keys)
+
+### Running Tests
+
 ```bash
 # Install dependencies
 composer install
 
-# Run all tests
+# Run default tests (unit + functional, no API calls)
 composer run-script test
-
-# Or run directly
+# or
 vendor/bin/phpunit
+
+# Run only unit tests
+vendor/bin/phpunit --testsuite unit
+
+# Run only functional tests
+vendor/bin/phpunit --testsuite functional
+
+# Run end-to-end tests (requires API keys)
+# Run E2E tests for a specific provider
+OPENAI_API_KEY=your-key vendor/bin/phpunit --testsuite e2e
+ANTHROPIC_API_KEY=your-key vendor/bin/phpunit --testsuite e2e
+
+# Run all E2E tests with both providers
+OPENAI_API_KEY=your-key ANTHROPIC_API_KEY=your-key vendor/bin/phpunit --testsuite e2e
+
+# Run all tests including E2E
+OPENAI_API_KEY=your-key ANTHROPIC_API_KEY=your-key vendor/bin/phpunit --testsuite all
 
 # Run a specific test file
 vendor/bin/phpunit tests/UnitTest/OpenAI/OpenAIConnectorTest.php
 ```
+
+### Test Structure
+
+| Test Type | Location | API Calls | Default |
+|-----------|----------|-----------|---------|
+| Unit | `tests/UnitTest/` | No (mocked) | Yes |
+| Functional | `tests/FunctionalTest/` | No (mocked) | Yes |
+| End-to-End | `tests/EndToEndTest/` | Yes (real) | No |
 
 ## Project Structure
 
@@ -376,13 +408,19 @@ AIGateway/
 │   └── cache/              # Default cache directory
 │       └── .gitignore
 ├── tests/
-│   └── UnitTest/
-│       ├── OpenAI/
-│       │   └── OpenAIConnectorTest.php
-│       ├── Anthropic/
-│       │   └── AnthropicConnectorTest.php
-│       └── Cache/
-│           └── FileCacheTest.php
+│   ├── UnitTest/
+│   │   ├── OpenAI/
+│   │   │   └── OpenAIConnectorTest.php
+│   │   ├── Anthropic/
+│   │   │   └── AnthropicConnectorTest.php
+│   │   └── Cache/
+│   │       └── FileCacheTest.php
+│   ├── FunctionalTest/
+│   │   ├── OpenAIFunctionalTest.php
+│   │   └── AnthropicFunctionalTest.php
+│   └── EndToEndTest/
+│       ├── OpenAIEndToEndTest.php
+│       └── AnthropicEndToEndTest.php
 ├── composer.json
 ├── phpunit.xml
 └── README.md
