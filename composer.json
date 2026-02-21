@@ -1,0 +1,37 @@
+{
+    "name": "elt/ai-gateway",
+    "description": "Package for connecting to AI chat services (OpenAI, Anthropic) with unified interface",
+    "type": "library",
+    "license": "MIT",
+    "scripts": {
+        "test": [
+            "vendor/bin/phpunit"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Sambhu Singh",
+            "email": "sambhu.raj.singh@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "AIGateway\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AIGateway\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "phpunit/phpunit": "^8.5.52 || ^9.6.33"
+    },
+    "require": {
+        "php": "^7.4",
+        "ext-json": "*",
+        "guzzlehttp/psr7": "^1.6.1 || ^2.0",
+        "guzzlehttp/guzzle": "^7.4.5"
+    }
+}
