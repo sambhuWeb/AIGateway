@@ -1,0 +1,86 @@
+I want meaning of word “Beautiful” in hindi in the following formatt
+
+Expected output
+{
+  "word": {
+    "base": "beautiful",
+    "variants": [
+      {
+        "language": "en",
+        "region": "GB",
+        "pronunciations": {
+          "ipa": "/ˈbjuːtɪf(ə)l/"
+        }
+      },
+      {
+        "language": "en",
+        "region": "US",
+        "pronunciations": {
+          "ipa": "/ˈbjuːtɪfəl/"
+        }
+      }
+    ]
+  },
+  "definitions": [
+    {
+      "posTag": "ADJ",
+      "posLabel": "adjective",
+      "language": "en",
+      "senses": [
+        {
+          "definition": "pleasing the senses or mind aesthetically",
+          "examples": [
+            "a beautiful woman",
+            "beautiful scenery"
+          ],
+          "synonyms": [
+            "attractive",
+            "lovely"
+          ],
+          "antonyms": [
+            "ugly"
+          ],
+          "domains": [
+            "aesthetics",
+            "art"
+          ]
+        },
+        {
+          "definition": "of a very high standard; excellent",
+          "examples": [
+            "he did a beautiful job of repairing the cabinet"
+          ],
+          "synonyms": [
+            "excellent",
+            "superb"
+          ],
+          "notes": "informal usage"
+        }
+      ]
+    },
+    {
+      "posTag": "NOUN",
+      "posLabel": "noun",
+      "language": "en",
+      "senses": [
+        {
+          "definition": "a beautiful person, especially a woman",
+          "examples": [
+            "she was considered a great beauty in her youth"
+          ],
+          "usage": "often plural",
+          "notes": "dated usage"
+        }
+      ]
+    }
+  ]
+}
+
+
+The Prompt
+
+{
+  "role": "user",
+  "content": "Find the dictionary meaning of the word \"beautiful\" in Hindi. Return the response in EXACTLY the following JSON structure. Keep the structure identical and only fill in values where appropriate. Hindi meanings should be placed in the definition fields.\n\n{\n  \"word\": {\n    \"base\": \"beautiful\",\n    \"variants\": [\n      {\n        \"language\": \"en\",\n        \"region\": \"GB\",\n        \"pronunciations\": {\n          \"ipa\": \"/ˈbjuːtɪf(ə)l/\"\n        }\n      },\n      {\n        \"language\": \"en\",\n        \"region\": \"US\",\n        \"pronunciations\": {\n          \"ipa\": \"/ˈbjuːtɪfəl/\"\n        }\n      }\n    ]\n  },\n  \"definitions\": [\n    {\n      \"posTag\": \"ADJ\",\n      \"posLabel\": \"adjective\",\n      \"language\": \"hi\",\n      \"senses\": []\n    },\n    {\n      \"posTag\": \"NOUN\",\n      \"posLabel\": \"noun\",\n      \"language\": \"hi\",\n      \"senses\": []\n    }\n  ]\n}"
+}
+
