@@ -1,0 +1,8 @@
+I want meaning of word “Beautiful” in hindi in the following format specified on 01-dictionary-search/dictionary-search-output.txt
+The Prompt
+
+{
+  "role": "user",
+  "content": "Find the dictionary meaning of the word \"beautiful\" in Hindi. Return the response in EXACTLY the following JSON structure. Keep the structure identical and only fill in values where appropriate. Hindi meanings should be placed in the definition fields.\n\n{\n  \"word\": {\n    \"base\": \"beautiful\",\n    \"variants\": [\n      {\n        \"language\": \"en\",\n        \"region\": \"GB\",\n        \"pronunciations\": {\n          \"ipa\": \"/ˈbjuːtɪf(ə)l/\"\n        }\n      },\n      {\n        \"language\": \"en\",\n        \"region\": \"US\",\n        \"pronunciations\": {\n          \"ipa\": \"/ˈbjuːtɪfəl/\"\n        }\n      }\n    ]\n  },\n  \"definitions\": [\n    {\n      \"posTag\": \"ADJ\",\n      \"posLabel\": \"adjective\",\n      \"language\": \"hi\",\n      \"senses\": []\n    },\n    {\n      \"posTag\": \"NOUN\",\n      \"posLabel\": \"noun\",\n      \"language\": \"hi\",\n      \"senses\": []\n    }\n  ]\n}"
+}
+
