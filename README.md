@@ -110,6 +110,11 @@ $response = $anthropic->chat($request);
 echo $response->getContent();
 ```
 
+## Publish new version
+
+- git tag v1.0.1
+- git push origin v1.0.1
+
 ## Using Caching
 
 The package includes a file-based caching system to avoid redundant API calls for identical requests. By default, cache files are stored in `storage/cache/` directory within the package.

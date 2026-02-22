@@ -3,7 +3,7 @@
         'name' => 'elt/ai-gateway',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'e3e61f4456df19b9646eab335048a8a1ab05a2c8',
+        'reference' => '0182de70a8887d015c405723830789ca5252616f',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'elt/ai-gateway' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'e3e61f4456df19b9646eab335048a8a1ab05a2c8',
+            'reference' => '0182de70a8887d015c405723830789ca5252616f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -32,6 +32,6 @@
         "php": "^7.4",
         "ext-json": "*",
         "guzzlehttp/psr7": "^1.6.1 || ^2.0",
-        "guzzlehttp/guzzle": "^7.4.5"
+        "guzzlehttp/guzzle": "^7.0"
     }
 }
