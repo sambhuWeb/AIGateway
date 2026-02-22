@@ -185,7 +185,8 @@ pip-log.txt
 .idea
 .idea/
 .idea/*
-
+local
+local/*
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
