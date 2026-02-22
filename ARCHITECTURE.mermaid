@@ -1,0 +1,27 @@
+flowchart TD
+    A[EasyLanguageTyping\nHost Application] -->|Bootstrap with config\nmax_requests, ttl, storage_path| B[AI-Gateway Package]
+
+    B --> C[Rate Limiter Middleware]
+
+    C -->|Check IP count\nfrom host storage| D{Over Limit?}
+
+    D -->|Yes| E[❌ 429 Too Many Requests]
+
+    D -->|No| F[Cache Lookup]
+
+    F -->|Cache HIT| G[✅ Return Cached Response\ntries_remaining unchanged]
+
+    F -->|Cache MISS| H[AI Provider Call\nOpenAI / DeepSeek / Claude]
+
+    H --> I[Store Response in Cache\nhost storage/ai-gateway/cache]
+
+    I --> J[Decrement IP Counter\nhost storage/ai-gateway/rate-limit]
+
+    J --> K[✅ Return Response\n+ tries_remaining: N-1]
+
+    style A fill:#4A90D9,color:#fff
+    style B fill:#7B68EE,color:#fff
+    style E fill:#E74C3C,color:#fff
+    style G fill:#27AE60,color:#fff
+    style K fill:#27AE60,color:#fff
+    style H fill:#F39C12,color:#fff

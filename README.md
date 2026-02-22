@@ -435,6 +435,44 @@ AIGateway/
 
 MIT License
 
+## How external Repo use this
+
+# EasyLanguageTyping — Structure & Flow
+
+## Directory Structure
+
+```
+EasyLanguageTyping/
+├── vendor/
+│   └── your-org/ai-gateway/       ← logic lives here (read-only)
+├── storage or tmp/
+│   ├── cache/                     ← cache files written here
+│   └── rate_limiting/             ← IP tracking written here
+```
+
+---
+
+## The Flow End-to-End
+
+```
+EasyLanguageTyping
+    │
+    ├── Passes config (max=100, window=60s)
+    ├── Passes storage path
+    │
+    ▼
+AI-Gateway (RateLimiter)
+    │
+    ├── Reads IP count from → EasyLanguageTyping/storage/
+    ├── Compares against max_requests (from config)
+    ├── Increments count    → EasyLanguageTyping/storage/
+    │
+    ├── ✅ Under limit → proceed to cache/AI call
+    └── ❌ Over limit  → throw 429
+```
+
+
 ## Author
 
 Sambhu Singh <sambhu.raj.singh@gmail.com>
+
