@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use AIGateway\Client\GuzzleHTTPClient;
 use AIGateway\Cache\FileCache;
 use AIGateway\AI\Anthropic\AnthropicConnector;
+use AIGateway\AI\Anthropic\AnthropicModels;
 use AIGateway\AI\DTO\Input\AnthropicRequestDTO;
 use AIGateway\AI\Exception\AIGatewayException;
 
@@ -69,7 +70,7 @@ class AnthropicEndToEndTest extends TestCase
     public function it_sends_real_request_to_anthropic_api(): void
     {
         $request = new AnthropicRequestDTO(
-            'claude-haiku-4-5-20251001',
+            AnthropicModels::CLAUDE_HAIKU_4_5,
             [['role' => 'user', 'content' => 'Say "Hello" and nothing else.']],
             0.0,
             10,
@@ -93,7 +94,7 @@ class AnthropicEndToEndTest extends TestCase
     public function it_caches_response_from_real_api_call(): void
     {
         $request = new AnthropicRequestDTO(
-            'claude-haiku-4-5-20251001',
+            AnthropicModels::CLAUDE_HAIKU_4_5,
             [['role' => 'user', 'content' => 'What is 2+2? Answer with just the number.']],
             0.0,
             5,
@@ -118,7 +119,7 @@ class AnthropicEndToEndTest extends TestCase
     public function it_handles_system_parameter_in_real_request(): void
     {
         $request = new AnthropicRequestDTO(
-            'claude-haiku-4-5-20251001',
+            AnthropicModels::CLAUDE_HAIKU_4_5,
             [['role' => 'user', 'content' => 'What language are you specialized in?']],
             0.0,
             50,
@@ -145,7 +146,7 @@ class AnthropicEndToEndTest extends TestCase
         ];
 
         $request = new AnthropicRequestDTO(
-            'claude-haiku-4-5-20251001',
+            AnthropicModels::CLAUDE_HAIKU_4_5,
             $messages,
             0.0,
             10,
@@ -164,7 +165,7 @@ class AnthropicEndToEndTest extends TestCase
     public function it_returns_valid_json_from_real_api(): void
     {
         $request = new AnthropicRequestDTO(
-            'claude-haiku-4-5-20251001',
+            AnthropicModels::CLAUDE_HAIKU_4_5,
             [['role' => 'user', 'content' => 'Say "test"']],
             0.0,
             5,
@@ -195,7 +196,7 @@ class AnthropicEndToEndTest extends TestCase
         $connector->setApiKey('invalid-api-key');
 
         $request = new AnthropicRequestDTO(
-            'claude-haiku-4-5-20251001',
+            AnthropicModels::CLAUDE_HAIKU_4_5,
             [['role' => 'user', 'content' => 'Hello']],
             0.7,
             10
@@ -213,7 +214,7 @@ class AnthropicEndToEndTest extends TestCase
     {
         // Test with Claude 3 Haiku (fastest/cheapest)
         $request = new AnthropicRequestDTO(
-            'claude-haiku-4-5-20251001',
+            AnthropicModels::CLAUDE_HAIKU_4_5,
             [['role' => 'user', 'content' => 'Say "Haiku" and nothing else.']],
             0.0,
             10,
