@@ -10,7 +10,7 @@ class AnthropicRequestDTO implements AIRequestDTO
     /** @var array */
     private $messages;
 
-    /** @var float */
+    /** @var float|null */
     private $temperature;
 
     /** @var int */
@@ -25,7 +25,7 @@ class AnthropicRequestDTO implements AIRequestDTO
     public function __construct(
         string $model,
         array $messages,
-        float $temperature = 0.7,
+        ?float $temperature = null,
         int $maxTokens = 1024,
         bool $fresh = false,
         ?string $system = null
@@ -48,7 +48,7 @@ class AnthropicRequestDTO implements AIRequestDTO
         return $this->messages;
     }
 
-    public function getTemperature(): float
+    public function getTemperature(): ?float
     {
         return $this->temperature;
     }
@@ -73,7 +73,7 @@ class AnthropicRequestDTO implements AIRequestDTO
         $payload = [
             'model' => $this->model,
             'messages' => $this->messages,
-            'temperature' => $this->temperature,
+            'temperature' => $this->temperature !== null ? $this->temperature : 1.0,
             'max_tokens' => $this->maxTokens
         ];
 

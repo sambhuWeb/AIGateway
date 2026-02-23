@@ -8,7 +8,7 @@ interface AIRequestDTO
 
     public function getMessages(): array;
 
-    public function getTemperature(): float;
+    public function getTemperature(): ?float;
 
     public function getMaxTokens(): int;
 

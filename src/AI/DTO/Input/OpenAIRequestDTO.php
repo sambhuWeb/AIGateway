@@ -10,7 +10,7 @@ class OpenAIRequestDTO implements AIRequestDTO
     /** @var array */
     private $messages;
 
-    /** @var float */
+    /** @var float|null */
     private $temperature;
 
     /** @var int */
@@ -25,7 +25,7 @@ class OpenAIRequestDTO implements AIRequestDTO
     public function __construct(
         string $model,
         array $messages,
-        float $temperature = 0.7,
+        ?float $temperature = null,
         int $maxTokens = 1024,
         bool $fresh = false,
         ?string $systemPrompt = null
@@ -48,7 +48,7 @@ class OpenAIRequestDTO implements AIRequestDTO
         return $this->messages;
     }
 
-    public function getTemperature(): float
+    public function getTemperature(): ?float
     {
         return $this->temperature;
     }
@@ -79,11 +79,16 @@ class OpenAIRequestDTO implements AIRequestDTO
             ]);
         }
 
-        return [
+        $payload = [
             'model' => $this->model,
             'messages' => $messages,
-            'temperature' => $this->temperature,
-            'max_tokens' => $this->maxTokens
+            'max_completion_tokens' => $this->maxTokens
         ];
+
+        if ($this->temperature !== null) {
+            $payload['temperature'] = $this->temperature;
+        }
+
+        return $payload;
     }
 }
