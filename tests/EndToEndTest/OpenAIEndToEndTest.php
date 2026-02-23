@@ -69,7 +69,7 @@ class OpenAIEndToEndTest extends TestCase
     public function it_sends_real_request_to_openai_api(): void
     {
         $request = new OpenAIRequestDTO(
-            'gpt-3.5-turbo',
+            'gpt-4.1-nano',
             [['role' => 'user', 'content' => 'Say "Hello" and nothing else.']],
             0.0,
             10,
@@ -93,7 +93,7 @@ class OpenAIEndToEndTest extends TestCase
     public function it_caches_response_from_real_api_call(): void
     {
         $request = new OpenAIRequestDTO(
-            'gpt-3.5-turbo',
+            'gpt-4.1-nano',
             [['role' => 'user', 'content' => 'What is 2+2? Answer with just the number.']],
             0.0,
             5,
@@ -118,7 +118,7 @@ class OpenAIEndToEndTest extends TestCase
     public function it_handles_system_prompt_in_real_request(): void
     {
         $request = new OpenAIRequestDTO(
-            'gpt-3.5-turbo',
+            'gpt-4.1-nano',
             [['role' => 'user', 'content' => 'What language are you specialized in?']],
             0.0,
             50,
@@ -145,7 +145,7 @@ class OpenAIEndToEndTest extends TestCase
         ];
 
         $request = new OpenAIRequestDTO(
-            'gpt-3.5-turbo',
+            'gpt-4.1-nano',
             $messages,
             0.0,
             10,
@@ -164,7 +164,7 @@ class OpenAIEndToEndTest extends TestCase
     public function it_returns_valid_json_from_real_api(): void
     {
         $request = new OpenAIRequestDTO(
-            'gpt-3.5-turbo',
+            'gpt-4.1-nano',
             [['role' => 'user', 'content' => 'Say "test"']],
             0.0,
             5,
@@ -195,7 +195,7 @@ class OpenAIEndToEndTest extends TestCase
         $connector->setApiKey('invalid-api-key');
 
         $request = new OpenAIRequestDTO(
-            'gpt-3.5-turbo',
+            'gpt-4.1-nano',
             [['role' => 'user', 'content' => 'Hello']],
             0.7,
             10
