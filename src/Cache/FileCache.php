@@ -60,7 +60,14 @@ class FileCache implements CacheInterface
             'created_at' => time()
         ];
 
-        file_put_contents($filePath, json_encode($data));
+        $fh = fopen($filePath, 'c');
+        if ($fh !== false) {
+            flock($fh, LOCK_EX);
+            ftruncate($fh, 0);
+            fwrite($fh, json_encode($data));
+            flock($fh, LOCK_UN);
+            fclose($fh);
+        }
     }
 
     public function has(string $key): bool
@@ -84,6 +91,6 @@ class FileCache implements CacheInterface
 
     public static function generateCacheKey(array $params): string
     {
-        return md5(json_encode($params));
+        return hash('sha256', json_encode($params));
     }
 }
