@@ -43,7 +43,12 @@ class RateLimitMiddleware
             throw new RateLimitExceededException();
         }
 
-        $cacheKey = hash('sha256', json_encode($request->getMessages()));
+        $systemPrompt = method_exists($request, 'getSystemPrompt') ? $request->getSystemPrompt() : null;
+        $cacheKey = hash('sha256', json_encode([
+            'model'         => $request->getModel(),
+            'messages'      => $request->getMessages(),
+            'system_prompt' => $systemPrompt,
+        ]));
 
         if ($this->cache !== null && !$request->isFresh() && $this->cache->has($cacheKey)) {
             $cachedData = json_decode($this->cache->get($cacheKey), true);
