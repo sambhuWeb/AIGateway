@@ -62,10 +62,11 @@ class FileRateLimit implements RateLimitInterface
         $data = $this->readData($fh);
 
         if (time() > $data['window_start'] + $this->windowSeconds) {
-            $data = ['count' => 0, 'window_start' => time()];
+            $data = ['count' => 0, 'window_start' => time(), 'ip' => $identifier];
         }
 
         $data['count']++;
+        $data['ip'] = $identifier;
         $this->writeData($fh, $data);
         flock($fh, LOCK_UN);
         fclose($fh);
