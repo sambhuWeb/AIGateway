@@ -39,19 +39,18 @@ class RateLimitMiddleware
 
     public function handle(AIRequestDTO $request, string $identifier = ''): AIResponseDTO
     {
-        if ($this->rateLimiter !== null && !$this->rateLimiter->isAllowed($identifier)) {
-            throw new RateLimitExceededException();
-        }
-
         $systemPrompt = method_exists($request, 'getSystemPrompt') ? $request->getSystemPrompt() : null;
         $cacheKey = hash('sha256', json_encode([
             'model'         => $request->getModel(),
             'messages'      => $request->getMessages(),
             'system_prompt' => $systemPrompt,
+            'temperature'   => $request->getTemperature(),
+            'max_tokens'    => $request->getMaxTokens(),
         ]));
 
-        if ($this->cache !== null && !$request->isFresh() && $this->cache->has($cacheKey)) {
-            $cachedData = json_decode($this->cache->get($cacheKey), true);
+        $cached = ($this->cache !== null && !$request->isFresh()) ? $this->cache->get($cacheKey) : null;
+        if ($cached !== null) {
+            $cachedData = json_decode($cached, true);
             return new AIResponseDTO(
                 $cachedData['content'],
                 $cachedData['model'],
@@ -59,6 +58,10 @@ class RateLimitMiddleware
                 $cachedData['completion_tokens'],
                 true
             );
+        }
+
+        if ($this->rateLimiter !== null && !$this->rateLimiter->isAllowed($identifier)) {
+            throw new RateLimitExceededException();
         }
 
         $response = $this->connector->chat($request);
