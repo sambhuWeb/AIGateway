@@ -37,16 +37,27 @@ class RateLimitMiddleware
         $this->cacheTtl = $cacheTtl;
     }
 
-    public function handle(AIRequestDTO $request, string $identifier = ''): AIResponseDTO
+    /**
+     * @param array $cacheKeyContext Extra values folded into the cache key (e.g. ['tone' => 'casual']),
+     *                                so callers that vary non-prompt request context (like translation
+     *                                tone) get their own cache entry even when the cacheable fields below
+     *                                are otherwise identical. Omitted entirely from the hash when empty,
+     *                                so callers that don't pass it keep their existing cache keys.
+     */
+    public function handle(AIRequestDTO $request, string $identifier = '', array $cacheKeyContext = []): AIResponseDTO
     {
         $systemPrompt = method_exists($request, 'getSystemPrompt') ? $request->getSystemPrompt() : null;
-        $cacheKey = hash('sha256', json_encode([
+        $cacheKeyData = [
             'model'         => $request->getModel(),
             'messages'      => $request->getMessages(),
             'system_prompt' => $systemPrompt,
             'temperature'   => $request->getTemperature(),
             'max_tokens'    => $request->getMaxTokens(),
-        ]));
+        ];
+        if (!empty($cacheKeyContext)) {
+            $cacheKeyData['context'] = $cacheKeyContext;
+        }
+        $cacheKey = hash('sha256', json_encode($cacheKeyData));
 
         $cached = ($this->cache !== null && !$request->isFresh()) ? $this->cache->get($cacheKey) : null;
         if ($cached !== null) {

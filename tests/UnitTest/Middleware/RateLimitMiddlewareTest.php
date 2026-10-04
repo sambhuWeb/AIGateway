@@ -221,6 +221,103 @@ class RateLimitMiddlewareTest extends TestCase
     }
 
     // -------------------------------------------------------------------------
+    // Tone-aware cache key (cacheKeyContext)
+    // -------------------------------------------------------------------------
+
+    /**
+     * @test
+     */
+    public function it_omits_context_from_cache_key_when_not_provided(): void
+    {
+        $this->rateLimiter->method('isAllowed')->willReturn(true);
+        $this->rateLimiter->method('consume')->willReturn(9);
+
+        $this->cache->expects($this->once())
+            ->method('get')
+            ->with($this->expectedCacheKey())
+            ->willReturn(null);
+
+        $this->connector->method('chat')->willReturn($this->fakeResponse);
+
+        $middleware = new RateLimitMiddleware($this->connector, $this->rateLimiter, $this->cache);
+        $middleware->handle($this->makeRequest(false), '1.2.3.4');
+    }
+
+    /**
+     * @test
+     */
+    public function it_produces_different_cache_key_for_different_tone(): void
+    {
+        $keyStandard = hash('sha256', json_encode([
+            'model' => 'gpt-4', 'messages' => [['role' => 'user', 'content' => 'Hello']],
+            'system_prompt' => null, 'temperature' => 0.7, 'max_tokens' => 100,
+            'context' => ['tone' => 'standard'],
+        ]));
+        $keyCasual = hash('sha256', json_encode([
+            'model' => 'gpt-4', 'messages' => [['role' => 'user', 'content' => 'Hello']],
+            'system_prompt' => null, 'temperature' => 0.7, 'max_tokens' => 100,
+            'context' => ['tone' => 'casual'],
+        ]));
+        $keyFormal = hash('sha256', json_encode([
+            'model' => 'gpt-4', 'messages' => [['role' => 'user', 'content' => 'Hello']],
+            'system_prompt' => null, 'temperature' => 0.7, 'max_tokens' => 100,
+            'context' => ['tone' => 'formal'],
+        ]));
+
+        self::assertNotEquals($keyStandard, $keyCasual);
+        self::assertNotEquals($keyStandard, $keyFormal);
+        self::assertNotEquals($keyCasual, $keyFormal);
+
+        $this->rateLimiter->method('isAllowed')->willReturn(true);
+        $this->rateLimiter->method('consume')->willReturn(9);
+        $this->connector->method('chat')->willReturn($this->fakeResponse);
+
+        $getArgs = [];
+        $this->cache->method('get')->willReturnCallback(function (string $key) use (&$getArgs) {
+            $getArgs[] = $key;
+            return null;
+        });
+        $this->cache->method('set');
+
+        $middleware = new RateLimitMiddleware($this->connector, $this->rateLimiter, $this->cache);
+        $middleware->handle($this->makeRequest(false), '1.2.3.4', ['tone' => 'standard']);
+        $middleware->handle($this->makeRequest(false), '1.2.3.4', ['tone' => 'casual']);
+        $middleware->handle($this->makeRequest(false), '1.2.3.4', ['tone' => 'formal']);
+
+        self::assertEquals([$keyStandard, $keyCasual, $keyFormal], $getArgs);
+    }
+
+    /**
+     * @test
+     */
+    public function it_reuses_cache_entry_for_same_tone_across_calls(): void
+    {
+        $this->cache->expects($this->exactly(2))
+            ->method('get')
+            ->with($this->callback(function (string $key) {
+                return $key === hash('sha256', json_encode([
+                    'model' => 'gpt-4', 'messages' => [['role' => 'user', 'content' => 'Hello']],
+                    'system_prompt' => null, 'temperature' => 0.7, 'max_tokens' => 100,
+                    'context' => ['tone' => 'casual'],
+                ]));
+            }))
+            ->willReturnOnConsecutiveCalls(null, $this->cachedJson());
+
+        $this->rateLimiter->method('isAllowed')->willReturn(true);
+        $this->rateLimiter->expects($this->once())->method('consume')->willReturn(9);
+        $this->cache->expects($this->once())->method('set');
+        $this->connector->expects($this->once())->method('chat')->willReturn($this->fakeResponse);
+
+        $middleware = new RateLimitMiddleware($this->connector, $this->rateLimiter, $this->cache);
+
+        $first = $middleware->handle($this->makeRequest(false), '1.2.3.4', ['tone' => 'casual']);
+        $second = $middleware->handle($this->makeRequest(false), '1.2.3.4', ['tone' => 'casual']);
+
+        self::assertFalse($first->isFromCache());
+        self::assertTrue($second->isFromCache());
+    }
+
+    // -------------------------------------------------------------------------
     // Fix 3 — cache checked before rate limit
     // -------------------------------------------------------------------------
 
