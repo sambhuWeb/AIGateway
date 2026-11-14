@@ -4,6 +4,9 @@ namespace AIGateway\AI\OpenAI;
 
 class OpenAIModels
 {
+    // --- GPT-6 series ---
+    const GPT_6_LUNA = 'gpt-6-luna';
+
     // --- GPT-5 series ---
     const GPT_5      = 'gpt-5';
     const GPT_5_MINI = 'gpt-5-mini';
